@@ -1,0 +1,20 @@
+- name: install curator
+  pip: name=elasticsearch-curator
+
+- name: put deletion task in cron
+  cron:
+      name: ES curator indices deletion
+      minute: 3
+      hour: 3
+      job: "curator --master-only delete indices --older-than {{ curator_delete_older_than }} --time-unit days --timestring %Y.%m.%d 2>&1 | logger -t curator"
+      cron_file: es_curator
+      user: root
+
+- name: put closing task in cron
+  cron:
+      name: ES curator indices closing
+      minute: 14
+      hour: 3
+      job: "curator --master-only close indices --older-than {{ curator_close_older_than }} --time-unit days --timestring %Y.%m.%d 2>&1 | logger -t curator"
+      cron_file: es_curator
+      user: root

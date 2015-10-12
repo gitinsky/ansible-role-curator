@@ -1,0 +1,2 @@
+curator_delete_older_than: 90
+curator_close_older_than: 7
