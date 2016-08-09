@@ -2,7 +2,7 @@
   apt: name=python-pip state=latest update_cache=yes cache_valid_time=86400
 
 - name: install curator
-  pip: name=elasticsearch-curator
+  pip: name=elasticsearch-curator version=3.5
 
 - name: put deletion task in cron
   cron:
