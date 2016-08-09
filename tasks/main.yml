@@ -12,6 +12,7 @@
       job: "/usr/local/bin/curator --master-only delete indices --older-than {{ curator_delete_older_than }} --time-unit days --timestring \\%Y.\\%m.\\%d 2>&1 | logger -t curator"
       cron_file: es_curator
       user: root
+      state: "{{ yes if curator_delete_older_than else no }}"
 
 - name: put closing task in cron
   cron:
@@ -21,3 +22,4 @@
       job: "/usr/local/bin/curator --master-only close indices --older-than {{ curator_close_older_than }} --time-unit days --timestring \\%Y.\\%m.\\%d 2>&1 | logger -t curator"
       cron_file: es_curator
       user: root
+      state: "{{ yes if curator_close_older_than else no }}"
