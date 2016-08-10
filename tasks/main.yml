@@ -24,8 +24,6 @@
       user: root
       state: "{{ 'present' if curator_delete_by_exceed_gb else 'absent' }}"
 
-# curator --dry-run delete --disk-space 100 indices --older-than 40 --time-unit days --timestring \%Y.\%m.\%d
-
 - name: put closing task in cron
   cron:
       name: ES curator indices closing
