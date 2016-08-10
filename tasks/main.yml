@@ -2,7 +2,7 @@
   apt: name=python-pip state=latest update_cache=yes cache_valid_time=86400
 
 - name: install curator
-  pip: name=elasticsearch-curator version=3.5
+  pip: name=elasticsearch-curator version=3.5.1
 
 - name: put deletion task in cron
   cron:
@@ -13,6 +13,18 @@
       cron_file: es_curator
       user: root
       state: "{{ 'present' if curator_delete_older_than else 'absent' }}"
+
+- name: put size based deletion task in cron
+  cron:
+      name: ES curator indices deletion by size
+      minute: 3
+      hour: 4
+      job: "/usr/local/bin/curator --master-only delete --disk-space {{ curator_delete_by_exceed_gb }} indices --older-than {{ curator_delete_by_exceed_gb_max_age_days }} --time-unit days --timestring \\%Y.\\%m.\\%d 2>&1 | logger -t curator"
+      cron_file: es_curator
+      user: root
+      state: "{{ 'present' if curator_delete_by_exceed_gb else 'absent' }}"
+
+# curator --dry-run delete --disk-space 100 indices --older-than 40 --time-unit days --timestring \%Y.\%m.\%d
 
 - name: put closing task in cron
   cron:

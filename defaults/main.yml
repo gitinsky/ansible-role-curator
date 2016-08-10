@@ -1,2 +1,4 @@
 curator_delete_older_than: 90
 curator_close_older_than: 7
+curator_delete_by_exceed_gb: no
+curator_delete_by_exceed_gb_max_age_days: 0
